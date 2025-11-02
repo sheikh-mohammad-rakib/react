@@ -1,27 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import User from "./User";
 
-export default function MyApp() {
-  const [count, setCount] = useState(0);
+export default function App() {
+  const [user, setUser] = useState([]);
+  useEffect(()=> {
+    fetch('https://dummyjson.com/users')
+      .then((res) => res.json())
+      .then((data) => setUser(data.users));
+  }, [])
 
-  function handleClick() {
-    setCount(count + 1);
-  }
+  console.log(user)
 
   return (
-    <div>
-      <h1>Counters that update separately</h1>
-      <MyButton count={count} onClick={handleClick}/>
-      <MyButton count={count} onClick={handleClick}/>
+    <div className="flex gap-2 flex-wrap justify-center">
+      {user.map((user) => (
+        <User key={user.id} userInfo={user}/>
+      ))}
     </div>
-  );
-}
-
-function MyButton({ count, onClick }) {
-
-
-  return (
-    <button onClick={onClick}>
-      Clicked {count} times
-    </button>
-  );
+  )
 }
